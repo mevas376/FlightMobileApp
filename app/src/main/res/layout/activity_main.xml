@@ -23,6 +23,8 @@
        />
 
     <Button
+        android:id="@+id/url1"
+        android:onClick="url1Listener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -72,7 +74,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/url"
+            android:id="@+id/typeUrl"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

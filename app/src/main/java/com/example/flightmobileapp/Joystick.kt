@@ -100,7 +100,7 @@ class Joystick : AppCompatActivity() {
     private fun postNewCommand(elevator:Double, aileron:Double, throttle:Double, rudder:Double){
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(findViewById<EditText>(R.id.url).text.toString())
+            .baseUrl(findViewById<EditText>(R.id.typeUrl).text.toString())
             .build()
         val api = retrofit.create(Api::class.java)
        val myPost: Call<Command> =  api.postControl(Command(aileron,rudder,throttle,elevator))
