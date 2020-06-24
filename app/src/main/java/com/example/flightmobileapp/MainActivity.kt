@@ -7,6 +7,7 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 var isLocal= false
@@ -57,23 +58,29 @@ class MainActivity : AppCompatActivity() {
             var db: AppDB = AppDB.getInstance(this)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val url1string = db.urlDAO().getLastUrl()
+                val listUrls = db.urlDAO().getRecentUrl()
+
                 //check if there is no url in the database
-                if (url1string == null) {
-                    var a= 12
-//                    Toast.makeText(
-//                            this@MainActivity,
-//                    "No url in local host, please try again", Toast.LENGTH_SHORT
-//                    ).show()
-                }else{ //if there url in the database at thid place:
+                if (listUrls.isEmpty()) {
+                    var a = 12
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No url in local host, please try again", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+
+                } else { //if there is url in the database at this place:
+                    val url1string = listUrls[0]
+
                     //displaying the url in the edit text:
                     val editText = findViewById<EditText>(R.id.typeUrl)
                     editText.text = Editable.Factory.getInstance().newEditable(url1string)
 
                     //updating the url date in the database:
-                    CoroutineScope(Dispatchers.IO).launch {
                         db.urlDAO().updateUrl(url1string, System.currentTimeMillis())
-                    }
+
                 }
             }
         }
@@ -84,26 +91,123 @@ class MainActivity : AppCompatActivity() {
             var db: AppDB = AppDB.getInstance(this)
 
             CoroutineScope(Dispatchers.IO).launch {
+                val listUrls = db.urlDAO().getRecentUrl()
 
-                val url1string = db.urlDAO().getRecentUrl()[1]
-                //check if there is no url in the database
-                if (url1string == null) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "No url in local host, please try again", Toast.LENGTH_SHORT
-                    ).show()
+                //check if there is no url in the database at this place:
+                if (listUrls.size < 2) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No url in local host, please try again", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
                 }else{ //if there url in the database at thid place:
+                    val url1string = listUrls[1]
                     //displaying the url in the edit text:
                     val editText = findViewById<EditText>(R.id.typeUrl)
                     editText.text = Editable.Factory.getInstance().newEditable(url1string)
 
                     //updating the url date in the database:
-                    CoroutineScope(Dispatchers.IO).launch {
                         db.urlDAO().updateUrl(url1string, System.currentTimeMillis())
-                    }
                 }
             }
         }
+
+        //function LISTENER for the button URL3:
+        findViewById<Button>(R.id.url3).setOnClickListener(){
+
+            var db: AppDB = AppDB.getInstance(this)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listUrls = db.urlDAO().getRecentUrl()
+
+                //val url1string = db.urlDAO().getRecentUrl()[2]
+                //check if there is no url in the database
+                if (listUrls.size < 3) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No url in local host, please try again", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }else{ //if there url in the database at third place:
+                    val url1string = listUrls[2]
+
+                    //displaying the url in the edit text:
+                    val editText = findViewById<EditText>(R.id.typeUrl)
+                    editText.text = Editable.Factory.getInstance().newEditable(url1string)
+
+                    //updating the url date in the database:
+                        db.urlDAO().updateUrl(url1string, System.currentTimeMillis())
+                }
+            }
+        }
+
+        //function LISTENER for the button URL4:
+        findViewById<Button>(R.id.url4).setOnClickListener(){
+
+            var db: AppDB = AppDB.getInstance(this)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listUrls = db.urlDAO().getRecentUrl()
+
+                //val url1string = db.urlDAO().getRecentUrl()[3]
+                //check if there is no url in the database
+                if (listUrls.size < 4) {
+
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No url in local host, please try again", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }else{ //if there url in the database at third place:
+                    val url1string = listUrls[3]
+
+                    //displaying the url in the edit text:
+                    val editText = findViewById<EditText>(R.id.typeUrl)
+                    editText.text = Editable.Factory.getInstance().newEditable(url1string)
+
+                    //updating the url date in the database:
+                        db.urlDAO().updateUrl(url1string, System.currentTimeMillis())
+
+                }
+            }
+        }
+
+        //function LISTENER for the button URL5:
+        findViewById<Button>(R.id.url5).setOnClickListener(){
+
+            var db: AppDB = AppDB.getInstance(this)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listUrls = db.urlDAO().getRecentUrl()
+
+                //val url1string = db.urlDAO().getRecentUrl()[4]
+                //check if there is no url in the database
+                if (listUrls.size < 5) {
+
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No url in local host, please try again", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }else{ //if there url in the database at third place:
+                    val url1string = listUrls[4]
+
+                    //displaying the url in the edit text:
+                    val editText = findViewById<EditText>(R.id.typeUrl)
+                    editText.text = Editable.Factory.getInstance().newEditable(url1string)
+
+                    //updating the url date in the database:
+                        db.urlDAO().updateUrl(url1string, System.currentTimeMillis())
+
+                }
+            }
+        }
+
 
 
 
