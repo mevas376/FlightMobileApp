@@ -11,7 +11,8 @@ import java.time.LocalDateTime
 class UrlEntity {
 
     @PrimaryKey(autoGenerate = true)
-    var url_id:Int=0
+    var url_id:Int = 0
+
     @ColumnInfo (name="URL_NAME")
     var url_name:String=""
 

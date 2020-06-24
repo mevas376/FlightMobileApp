@@ -24,45 +24,48 @@
 
     <Button
         android:id="@+id/url1"
-        android:onClick="url1Listener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/icon_server"
-        android:text="@string/no_server_was_updated"
+        android:text="@string/local_host_1"
         android:textSize="20dp"
         android:layout_marginTop="20dp"
         android:textStyle="italic" />
     <Button
+        android:id="@+id/url2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/icon_server"
-        android:text="@string/no_server_was_updated"
+        android:text="@string/loca_host_2"
         android:textSize="20dp"
         android:textStyle="italic" />
     <Button
+        android:id="@+id/url3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/icon_server"
-        android:text="@string/no_server_was_updated"
+        android:text="@string/local_host_3"
         android:textSize="20dp"
         android:textStyle="italic" />
     <Button
+        android:id="@+id/url4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/icon_server"
-        android:text="@string/no_server_was_updated"
+        android:text="@string/local_host_4"
         android:textSize="20dp"
         android:textStyle="italic" />
     <Button
+        android:id="@+id/url5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/icon_server"
-        android:text="@string/no_server_was_updated"
+        android:text="@string/local_host_5"
         android:textSize="20dp"
         android:textStyle="italic" />
 
@@ -78,7 +81,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:autofillHints="@string/type_url"
+            android:autofillHints = "@string/type_url"
             android:background="@drawable/edit"
             android:hint="@string/type_url"
             android:inputType="textUri"
@@ -91,7 +94,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/button"
-            android:onClick="connectClick"
             android:text="@string/connect"
             android:textStyle="bold" />
 

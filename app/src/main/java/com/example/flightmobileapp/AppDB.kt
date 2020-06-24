@@ -1,10 +1,6 @@
 package com.example.flightmobileapp
 
-import android.content.Context
 import androidx.room.*
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-
 
 @Database (entities = [(UrlEntity::class)],version = 1)
 
@@ -21,7 +17,7 @@ abstract class AppDB : RoomDatabase(){
 //        }
         @Volatile
         private var INSTANCE : AppDB? = null
-        fun getInstance(context: Context):AppDB{
+        fun getInstance(context: MainActivity):AppDB{
             synchronized(this){
                 var instance = INSTANCE
                 if(instance==null){

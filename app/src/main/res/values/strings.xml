@@ -5,4 +5,9 @@
     <string name="type_url">Type URL</string>
     <string name="_0">0</string>
     <string name="no_server_was_updated">No server was updated</string>
+    <string name="local_host_1">local_host_1</string>
+    <string name="loca_host_2">loca_host_2</string>
+    <string name="local_host_3">local_host_3</string>
+    <string name="local_host_4">local_host_4</string>
+    <string name="local_host_5">local_host_5</string>
 </resources>
