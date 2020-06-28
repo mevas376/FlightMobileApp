@@ -2,7 +2,7 @@ package com.example.flightmobileapp
 
 import androidx.room.*
 
-@Database (entities = [(UrlEntity::class)],version = 1)
+@Database (entities = [(UrlEntity::class)],version = 1,exportSchema = false)
 
 abstract class AppDB : RoomDatabase(){
     abstract fun urlDAO():UrlDAO
@@ -24,7 +24,7 @@ abstract class AppDB : RoomDatabase(){
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         AppDB::class.java,
-                        "url_data_database3"
+                        "URL_data_table3"
                     //.addMigrations(MIGRATION_3_4)
                     ).build()
                 }

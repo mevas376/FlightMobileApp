@@ -1,5 +1,6 @@
 package com.example.flightmobileapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,12 +10,37 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-
+import Api
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import android.widget.SeekBar
+import android.widget.TextView
+import com.google.gson.GsonBuilder
+import io.github.controlwear.virtual.joystick.android.JoystickView
+import kotlinx.android.synthetic.main.joystick.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.concurrent.fixedRateTimer
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 var isLocal= false
 //private val uiScope = CoroutineScope(Dispatchers.Main)
 
-
 class MainActivity : AppCompatActivity() {
+    companion object {
+        lateinit var bitmap: Bitmap
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,9 +48,8 @@ class MainActivity : AppCompatActivity() {
         //function for the connect button:
         findViewById<Button>(R.id.connect_button).setOnClickListener(){
             //CoroutineScope(Dispatchers.IO).launch {
-
-                var urlText = typeUrl.text.toString()
-                var db:AppDB=AppDB.getInstance(this)
+            var urlText = typeUrl.text.toString()
+            var db:AppDB=AppDB.getInstance(this)
 
                 //if text box is empty: user needs to insert something
                 if(urlText.equals("")){
@@ -38,6 +63,9 @@ class MainActivity : AppCompatActivity() {
                         CoroutineScope(Dispatchers.IO).launch {
                             db.urlDAO().updateUrl(urlText, System.currentTimeMillis())
                         }
+                        //connect to server
+                        tryConnectToServer(urlText)
+
                     } else { //if typed new url
                         var uUrl = typeUrl.text.toString()
                         var url1 = UrlEntity()
@@ -47,6 +75,8 @@ class MainActivity : AppCompatActivity() {
                         CoroutineScope(Dispatchers.IO).launch {
                             db.urlDAO().saveUrl(url1)
                         }
+                        //connect to server
+                        tryConnectToServer(uUrl)
                     }
                 //}
             }
@@ -228,6 +258,69 @@ class MainActivity : AppCompatActivity() {
        }.start()
 
         }
+
+
+    private fun tryConnectToServer(url : String) {
+        try {
+            Toast.makeText(
+                applicationContext,
+                "Logging...",
+                Toast.LENGTH_LONG
+            ).show()
+            val gson = GsonBuilder().setLenient().create()
+            val retrofit = Retrofit.Builder().baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create(gson)).build()
+            val api = retrofit.create(Api::class.java)
+            api.getImg().enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Can't Connect, try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val inputStream = response.body()?.byteStream()
+
+
+                    if (inputStream != null) {
+                        bitmap = BitmapFactory.decodeStream(inputStream)
+                        nextActivity(url)
+                    }else{
+                        bitmap = BitmapFactory.decodeStream(inputStream)
+                        Toast.makeText(
+                            applicationContext,
+                            "Can't get an image from the flight gear",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            })
+        } catch (e : Exception) {
+            Toast.makeText(
+                applicationContext,
+                "Can't Connect, try again",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun nextActivity(url : String) {
+        var line: String?
+        val sb = StringBuilder()
+        // create the second screen
+        val intent = Intent(this, Joystick::class.java)
+        intent.putExtra("url", url)
+        startActivity(intent)
+    }
+
+
+
 }
 
 
