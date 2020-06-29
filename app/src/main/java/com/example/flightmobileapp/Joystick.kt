@@ -38,84 +38,16 @@ class Joystick : AppCompatActivity() {
     private var changeImage = false
     private var url : String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.joystick)
-        url = intent.getStringExtra("url")
-        //set image.
-        val imageView = findViewById<ImageView>(R.id.server_screenshot)
-        imageView.setImageBitmap(bitmap)
-
-        findViewById<JoystickView>(R.id.joystickView).setOnMoveListener { angle, strength ->
-            val angleRad = Math.toRadians(angle.toDouble())
-            val baseRadius: Double = ((240 * 80) / 200).toDouble()
-            val joyRadius: Double = (strength * baseRadius) / 100
-            //calculate
-            val y: Double = joyRadius * sin(angleRad)
-            val x: Double = joyRadius * cos(angleRad)
-            //normalize the value between 0 to 1
-            //elevator
-            val normalizeY: Double = y / baseRadius
-            //aileron
-            val normalizeX: Double = x / baseRadius
-            if ((abs(normalizeY - lastElevator) > 0.02) || (abs(normalizeX - lastAileron) > 0.02)) {
-                lastElevator = normalizeY
-                lastAileron = normalizeX
-                CoroutineScope(IO).launch { setCommand() }            }
-        }
-
-        val throttleSB = findViewById<SeekBar>(R.id.throttleSeekBar)
-        val rudderSB = findViewById<SeekBar>(R.id.rudderSeekBar)
-        rudderSB.max = 200
-        throttleSB.max = 100
-        val throttleText = findViewById<TextView>(R.id.thrText)
-        val rudderText = findViewById<TextView>(R.id.rudText)
-        throttleSB?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val num = (progress.toDouble() / 100)
-                if (num == 0.0) {
-                    throttleText.text = "0"
-                } else {
-                    throttleText.text = String.format("%.2f", num).toDouble().toString()
-                }
-                if (abs(lastThrottle - num) > 0.01) {
-                    lastThrottle = num
-                    CoroutineScope(IO).launch { setCommand() }                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is started.
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is stopped.
-            }
-        })
-
-        rudderSB?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val num = (progress.toDouble() / 100) - 1
-                if (num == 0.0) {
-                    rudderText.text = "0"
-                } else {
-                    rudderText.text = String.format("%.2f", num).toDouble().toString()
-                }
-
-                if (abs(lastRudder - num) > 0.02) {
-                    lastRudder = num
-                    CoroutineScope(IO).launch { setCommand() }                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is started.
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is stopped.
-            }
-        })
-
-
+        url = intent.getStringExtra("url").toString()
+       // val imageView = findViewById<ImageView>(R.id.server_screenshot)
+      //  imageView.setImageBitmap(MainActivity.bitmap)
+        setJoystick()
+        setThrottle()
+        setRudder()
         CoroutineScope(IO).launch { setCommand() }
         onStart()
     }
@@ -189,6 +121,7 @@ class Joystick : AppCompatActivity() {
                             Toast.LENGTH_SHORT).show()
                     }
                 }
+                println("good")
             }
         })
     }
@@ -258,7 +191,81 @@ class Joystick : AppCompatActivity() {
             return finallyError
         }
     }
+    private fun setJoystick(){
+        findViewById<JoystickView>(R.id.joystickView).setOnMoveListener { angle, strength ->
+            val angleRad = Math.toRadians(angle.toDouble())
+            val baseRadius: Double = ((240 * 80) / 200).toDouble()
+            val joyRadius: Double = (strength * baseRadius) / 100
+            //calculate
+            val y: Double = joyRadius * sin(angleRad)
+            val x: Double = joyRadius * cos(angleRad)
+            //normalize the value between 0 to 1
+            //elevator
+            val normalizeY: Double = y / baseRadius
+            //aileron
+            val normalizeX: Double = x / baseRadius
+            if ((abs(normalizeY - lastElevator) > 0.02) || (abs(normalizeX - lastAileron) > 0.02)) {
+                lastElevator = normalizeY
+                lastAileron = normalizeX
+                CoroutineScope(IO).launch { setCommand() }            }
+        }
+    }
 
+    private fun setThrottle(){
+        val throttleSB = findViewById<SeekBar>(R.id.throttleSeekBar)
+        throttleSB.max = 100
+        val throttleText = findViewById<TextView>(R.id.thrText)
+        throttleSB?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                val num = (progress.toDouble() / 100)
+                if (num == 0.0) {
+                    throttleText.text = "0"
+                } else {
+                    throttleText.text = String.format("%.2f", num).toDouble().toString()
+                }
+                if (abs(lastThrottle - num) > 0.01) {
+                    lastThrottle = num
+                    CoroutineScope(IO).launch { setCommand() }                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is started.
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is stopped.
+            }
+        })
+    }
+
+    private fun  setRudder(){
+        val rudderSB = findViewById<SeekBar>(R.id.rudderSeekBar)
+        rudderSB.max = 200
+        val rudderText = findViewById<TextView>(R.id.rudText)
+        rudderSB?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                val num = (progress.toDouble() / 100) - 1
+                if (num == 0.0) {
+                    rudderText.text = "0"
+                } else {
+                    rudderText.text = String.format("%.2f", num).toDouble().toString()
+                }
+
+                if (abs(lastRudder - num) > 0.02) {
+                    lastRudder = num
+                    CoroutineScope(IO).launch { setCommand() }                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is started.
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is stopped.
+            }
+        })
+
+    }
 }
 
 

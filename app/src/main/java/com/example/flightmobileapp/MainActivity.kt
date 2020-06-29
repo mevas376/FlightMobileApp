@@ -34,11 +34,10 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 var isLocal= false
-//private val uiScope = CoroutineScope(Dispatchers.Main)
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        lateinit var bitmap: Bitmap
+         lateinit var bitmap: Bitmap
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +47,8 @@ class MainActivity : AppCompatActivity() {
         //function for the connect button:
         findViewById<Button>(R.id.connect_button).setOnClickListener(){
             //CoroutineScope(Dispatchers.IO).launch {
-            var urlText = typeUrl.text.toString()
-            var db:AppDB=AppDB.getInstance(this)
+            val urlText = findViewById<EditText>(R.id.typeUrl).text.toString()
+            val db:AppDB=AppDB.getInstance(this)
 
                 //if text box is empty: user needs to insert something
                 if(urlText.equals("")){
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                             db.urlDAO().saveUrl(url1)
                         }
                         //connect to server
-                        tryConnectToServer(uUrl)
+                        tryConnectToServer(urlText)
                     }
                 //}
             }
@@ -292,7 +291,6 @@ class MainActivity : AppCompatActivity() {
                         bitmap = BitmapFactory.decodeStream(inputStream)
                         nextActivity(url)
                     }else{
-                        bitmap = BitmapFactory.decodeStream(inputStream)
                         Toast.makeText(
                             applicationContext,
                             "Can't get an image from the flight gear",
