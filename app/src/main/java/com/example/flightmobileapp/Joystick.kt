@@ -90,7 +90,7 @@ class Joystick : AppCompatActivity() {
     }
 
     fun setCommand() {
-        val json: String =
+        val json=
             "{\"aileron\": $lastAileron,\n \"rudder\": $lastRudder,\n \"elevator\": $lastElevator,\n \"throttle\": $lastThrottle\n}"
         val rb: RequestBody = RequestBody.create(MediaType.parse("application/json"), json)
         val gson = GsonBuilder()
@@ -101,7 +101,8 @@ class Joystick : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val api = retrofit.create(Api::class.java)
-        val body = api.postControl(rb).enqueue(object : Callback<ResponseBody> {
+        println("URL:"+url)
+        api.postControl(rb).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 if (!changeImage) {
                     return
@@ -121,7 +122,7 @@ class Joystick : AppCompatActivity() {
                             Toast.LENGTH_SHORT).show()
                     }
                 }
-                println("good")
+                println("Response Code:"+response.code())
             }
         })
     }
@@ -131,7 +132,7 @@ class Joystick : AppCompatActivity() {
             Toast.LENGTH_SHORT).show()
     }
 
-    protected override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
     }
 
@@ -175,7 +176,7 @@ class Joystick : AppCompatActivity() {
 
     companion object {
         fun getResponseMessage(response: Response<ResponseBody>): String {
-            var reader: BufferedReader? = null
+            val reader: BufferedReader?
             val sb = StringBuilder()
             try {
                 reader =

@@ -59,19 +59,19 @@ class MainActivity : AppCompatActivity() {
                 } else {//otherwise textbox is not empty:
 
                     if (isLocal) { //if local host is pressed
-                        CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(IO).launch {
                             db.urlDAO().updateUrl(urlText, System.currentTimeMillis())
                         }
                         //connect to server
                         tryConnectToServer(urlText)
 
                     } else { //if typed new url
-                        var uUrl = typeUrl.text.toString()
-                        var url1 = UrlEntity()
+                        val uUrl = typeUrl.text.toString()
+                        val url1 = UrlEntity()
                         url1.url_name = uUrl
                         url1.URL_Date = System.currentTimeMillis()
 
-                        CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(IO).launch {
                             db.urlDAO().saveUrl(url1)
                         }
                         //connect to server
@@ -84,14 +84,13 @@ class MainActivity : AppCompatActivity() {
         //function LISTENER for the button URL1:
         findViewById<Button>(R.id.url1).setOnClickListener(){
 
-            var db: AppDB = AppDB.getInstance(this)
+            val db: AppDB = AppDB.getInstance(this)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(IO).launch {
                 val listUrls = db.urlDAO().getRecentUrl()
 
                 //check if there is no url in the database
                 if (listUrls.isEmpty()) {
-                    var a = 12
                     GlobalScope.launch(Dispatchers.Main) {
                         Toast.makeText(
                             this@MainActivity,
@@ -117,9 +116,9 @@ class MainActivity : AppCompatActivity() {
         //function LISTENER for the button URL2:
         findViewById<Button>(R.id.url2).setOnClickListener(){
 
-            var db: AppDB = AppDB.getInstance(this)
+            val db: AppDB = AppDB.getInstance(this)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(IO).launch {
                 val listUrls = db.urlDAO().getRecentUrl()
 
                 //check if there is no url in the database at this place:
@@ -146,9 +145,9 @@ class MainActivity : AppCompatActivity() {
         //function LISTENER for the button URL3:
         findViewById<Button>(R.id.url3).setOnClickListener(){
 
-            var db: AppDB = AppDB.getInstance(this)
+            val db: AppDB = AppDB.getInstance(this)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(IO).launch {
                 val listUrls = db.urlDAO().getRecentUrl()
 
                 //val url1string = db.urlDAO().getRecentUrl()[2]
@@ -176,9 +175,9 @@ class MainActivity : AppCompatActivity() {
         //function LISTENER for the button URL4:
         findViewById<Button>(R.id.url4).setOnClickListener(){
 
-            var db: AppDB = AppDB.getInstance(this)
+            val db: AppDB = AppDB.getInstance(this)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(IO).launch {
                 val listUrls = db.urlDAO().getRecentUrl()
 
                 //val url1string = db.urlDAO().getRecentUrl()[3]
@@ -208,9 +207,9 @@ class MainActivity : AppCompatActivity() {
         //function LISTENER for the button URL5:
         findViewById<Button>(R.id.url5).setOnClickListener(){
 
-            var db: AppDB = AppDB.getInstance(this)
+            val db: AppDB = AppDB.getInstance(this)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(IO).launch {
                 val listUrls = db.urlDAO().getRecentUrl()
 
                 //val url1string = db.urlDAO().getRecentUrl()[4]
@@ -241,7 +240,7 @@ class MainActivity : AppCompatActivity() {
 
 
         Thread {
-            var db:AppDB=AppDB.getInstance(this)
+            val db:AppDB=AppDB.getInstance(this)
             db.urlDAO().deleteAll()
 //            var lastURL:String = db.urlDAO().getLastUrl()
 ////            var url1 = UrlEntity()
@@ -272,6 +271,7 @@ class MainActivity : AppCompatActivity() {
             val api = retrofit.create(Api::class.java)
             api.getImg().enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    println("ERROR:"+t)
                     Toast.makeText(
                         applicationContext,
                         "Can't Connect, try again",
@@ -309,8 +309,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun nextActivity(url : String) {
-        var line: String?
-        val sb = StringBuilder()
         // create the second screen
         val intent = Intent(this, Joystick::class.java)
         intent.putExtra("url", url)

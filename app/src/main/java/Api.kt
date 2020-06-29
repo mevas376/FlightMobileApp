@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface Api {
-    @POST("/POST/api/command")
+    @POST("/api/command")
     fun postControl(@Body requestBody: RequestBody): Call<ResponseBody>
 
     @GET("/screenshot")
