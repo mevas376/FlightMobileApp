@@ -10,4 +10,8 @@
     <string name="local_host_3">local_host_3</string>
     <string name="local_host_4">local_host_4</string>
     <string name="local_host_5">local_host_5</string>
+    <string name="throttle">throttle</string>
+    <string name="rudder">rudder</string>
+    <string name="aileron">aileron</string>
+    <string name="elevator">elevator</string>
 </resources>
