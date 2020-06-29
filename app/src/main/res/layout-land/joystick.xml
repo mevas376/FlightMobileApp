@@ -129,7 +129,8 @@
         android:layout_marginRight="441dp"
         android:layout_marginBottom="51dp"
         android:background="#000000"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        />
 
     <TextView
         android:id="@+id/thrText"
