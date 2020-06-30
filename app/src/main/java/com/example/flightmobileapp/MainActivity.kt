@@ -35,6 +35,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 var isLocal= false
 
+
 class MainActivity : AppCompatActivity() {
     companion object {
          lateinit var bitmap: Bitmap
